@@ -98,7 +98,7 @@ class Repo_WS {
     send_message(message, client) {
         console.log('======== send_message() =========');
         this.socket.send(JSON.stringify({
-            type: 'message',
+            type: 'give_data',
             message: message
         }));
     }
