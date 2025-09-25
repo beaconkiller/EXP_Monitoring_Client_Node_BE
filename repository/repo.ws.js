@@ -108,7 +108,10 @@ class Repo_WS {
     exec_command(data) {
         repoHelperV2.c_log('GOT COMMAND', true);
 
-        if (data == 'get_storage') {
+        data = JSON.parse(data);
+        let type = data['type']
+
+        if (type == 'get_storage') {
             this.get_storage();
         }
     }
@@ -116,6 +119,8 @@ class Repo_WS {
 
 
     async get_storage() {
+        repoHelperV2.c_log('get_storage()', true);
+
         const res = await new Promise((resolve, reject) => {
             exec('df -kh', (error, stdout, stderr) => {
                 if (error) return reject(error);
