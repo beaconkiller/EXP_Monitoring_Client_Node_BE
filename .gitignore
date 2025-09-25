@@ -143,3 +143,5 @@ file_storage/file_pengajuan/*
 
 file_storage/ttd_approval/*
 !file_storage/ttd_approval/.gitkeep
+
+client_settings.json

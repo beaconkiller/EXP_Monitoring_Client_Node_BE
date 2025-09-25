@@ -5,6 +5,7 @@ const moment = require('moment');
 const path = require('path');
 const os = require('os');
 const websocket = require('./repository/repo.ws');
+const repoSetup = require('./repository/repo.setup.');
 
 
 
@@ -15,6 +16,7 @@ async function startup() {
     // ----------------------------------------
 
     setGlobalVariable();
+    repoSetup.init_setup();
 
 
 
@@ -34,14 +36,14 @@ async function startup() {
     // -------------- WEB-SERVER --------------
     // ----------------------------------------
 
-    try {
-        console.log('Initializing web server module');
+    // try {
+    //     console.log('Initializing web server module');
 
-        await webServer.initialize();
-    } catch (err) {
-        console.error(`${err}`);
-        process.exit(1); // Non-zero failure code
-    }
+    //     await webServer.initialize();
+    // } catch (err) {
+    //     console.error(`${err}`);
+    //     process.exit(1); // Non-zero failure code
+    // }
 
 
 

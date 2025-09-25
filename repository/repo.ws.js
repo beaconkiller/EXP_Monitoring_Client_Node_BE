@@ -1,94 +1,97 @@
 const fs = require('fs');
 const path = require('path');
 const WebSocket = require('ws');
+const repoCommand = require('./repo.command.');
+const repoHelperV2 = require('./repo.helperV2');
 
 class Repo_WS {
 
-    // Connect to a WebSocket server
-    wss = null;
-    arr_clients = new Map();
+
+    socket = null;
+    client_settings = null;
 
 
-    initialize() {
+    async initialize() {
         try {
-            let tmp_wss = new WebSocket.Server({ port: 4099 });
-            this.wss = tmp_wss;
 
+            repoHelperV2.c_log('INITIALIZING WEBSOCKET CONNECTION', true);
 
-            this.wss.on('connection', (ws) => {
-                console.log(' ');
-                console.log(' ');
-                console.log(' ');
+            this.read_settings_json();
 
+            console.log(this.client_settings);
+            console.log(' ');
 
-                // ws.send('Hello from server 👋');
+            this.connect_ws();
 
-                ws.on('message', (message) => {
-                    this.handle_register(ws, message);
+            this.socket.on('open', () => {
+                console.log('Connected to server');
 
-                    console.log(`message: ${message}`);
-
-                    // this.handle_message(message);
-                    // ws.send(`Server received: ${message}`);
-                });
-
-                ws.on('close', () => {
-                    this.handle_disconnect(ws);
-                });
+                this.socket.send(JSON.stringify({
+                    type: 'register',
+                    deviceId: this.client_settings['client_id'],
+                }));
             });
 
-            console.log('WebSocket server is running on ws://localhost:8080');
+            this.socket.on('message', (data) => {
+                this.handle_message(data);
+            });
+
+            this.socket.on('close', () => {
+                this.reconnect_ws();
+            });
+
+            this.socket.on('error', (err) => {
+                console.error('Error:', err.message);
+            });
+
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
+    }
+
+
+    connect_ws() {
+        // console.log('========= connect_ws() =========');
+        this.socket = new WebSocket(this.client_settings['target_ws_host']);
+    }
+
+
+    async reconnect_ws() {
+        console.log('reconnecting...');
+        await new Promise((resolve) => {
+            setTimeout(() => {
+                resolve();
+            }, 2000);
+        });
+
+        this.initialize();
     }
 
 
 
     handle_message(data) {
-        let type = data['type'];
-        let message = data['message'];
-
-        if (type == 'register') {
-            client_id = message;
-
-        }
+        repoCommand.exec_command(data);
     }
 
 
 
-    handle_register(ws_data, message) {
-        message = JSON.parse(message);
+    read_settings_json() {
+        // console.log('================ this.read_settings_json() ================');
+        // console.log(' ');
 
-        let type = message['type'];
-        let deviceId = message['deviceId'];
+        let file_path = path.join(__dirname, '..', 'client_settings.json');
+        let fileContent = fs.readFileSync(file_path, { encoding: 'utf8' });
+        let file = JSON.parse(fileContent);
 
-        // console.log('--- NEW CLIENT ---');
+        this.client_settings = file;
 
-        if (type == 'register') {
-            ws_data.deviceId = deviceId;
-            this.arr_clients.set(deviceId, ws_data);
-
-            // console.log(this.arr_clients);
-        }
-    }
+        // console.log(' ');
+    };
 
 
 
-    handle_disconnect(ws) {
-        if (ws.deviceId) {
-            this.clients.delete(ws.deviceId);
-            console.log(`--- REMOVED CLIENT --- ${ws.deviceId}`);
-        }
-    }
-
-
-
-    getter_clients() {
-        console.log('======== getter_clients() =======');
-
-        console.log(this.arr_clients);
-        return this.arr_clients;
+    getter_client_settings() {
+        return this.client_settings;
     }
 }
 

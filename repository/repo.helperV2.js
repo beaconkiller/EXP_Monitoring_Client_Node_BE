@@ -64,7 +64,7 @@ class HelperV2 {
     }
 
 
-    async set_delay(val){
+    async set_delay(val) {
         await new Promise((resolve) => {
             setTimeout(() => {
                 resolve();
@@ -75,6 +75,18 @@ class HelperV2 {
 
     get_curr_date() {
         return (new Date()).toISOString().split('.')[0].replaceAll('T', ' ');
+    }
+
+
+
+    c_log(data, bool) {
+        console.log(' ');
+        if (bool) {
+            console.log(`=========== ${data} ==========`);
+        } else {
+            console.log(`${data}`);
+        }
+        console.log(' ');
     }
 }
 

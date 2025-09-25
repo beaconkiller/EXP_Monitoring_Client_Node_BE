@@ -10,9 +10,9 @@ class NE2EE {
      */
     constructor({ selfPrivateKey }) {
         this.privateKey = selfPrivateKey;
-        console.log("NE2EE instance created with private key:", this.privateKey ? "set" : "not set");
+        // console.log("NE2EE instance created with private key:", this.privateKey ? "set" : "not set");
         if (this.privateKey) {
-            console.log("Private key start:", this.privateKey.substring(0, 50) + '...');
+            // console.log("Private key start:", this.privateKey.substring(0, 50) + '...');
         }
     }
 
@@ -36,8 +36,8 @@ class NE2EE {
             const decryptedIVBase64 = crypt.decrypt(encryptedIvStr);
             const decryptedAESBase64 = crypt.decrypt(encryptedAesStr);
 
-            console.log("Decrypted AES key (Base64) string:", decryptedAESBase64);
-            console.log("Decrypted IV (Base64) string:", decryptedIVBase64);
+            // console.log("Decrypted AES key (Base64) string:", decryptedAESBase64);
+            // console.log("Decrypted IV (Base64) string:", decryptedIVBase64);
 
             if (!decryptedIVBase64 || !decryptedAESBase64) {
                 // Perbaiki pesan error agar lebih informatif
@@ -143,8 +143,8 @@ function generateKeyPair() {
         }
     });
 
-    console.log(`Ini hasil private Key nya : ${keyPair.privateKey}`)
-    console.log(`Ini hasil public Key nya : ${keyPair.publicKey}`)
+    // console.log(`Ini hasil private Key nya : ${keyPair.privateKey}`)
+    // console.log(`Ini hasil public Key nya : ${keyPair.publicKey}`)
 
     return {
         privateKey: keyPair.privateKey,
@@ -158,7 +158,7 @@ function generateOrLoadKeyPair() {
 
   // kalau sudah ada file key → langsung baca
   if (fs.existsSync(privateKeyPath) && fs.existsSync(publicKeyPath)) {
-    console.log('🔑 Loading RSA keypair dari file...');
+    // console.log('🔑 Loading RSA keypair dari file...');
     const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
     const publicKey = fs.readFileSync(publicKeyPath, 'utf8');
     return { privateKey, publicKey };
@@ -187,7 +187,7 @@ function generateOrLoadKeyPair() {
   fs.writeFileSync(privateKeyPath, privateKey);
   fs.writeFileSync(publicKeyPath, publicKey);
 
-  console.log('✅ RSA keypair baru disimpan ke folder keys/');
+//   console.log('✅ RSA keypair baru disimpan ke folder keys/');
   return { privateKey, publicKey };
 }
 
