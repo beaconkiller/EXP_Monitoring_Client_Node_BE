@@ -95,11 +95,11 @@ class Repo_WS {
 
 
 
-    send_message(message, client) {
+    send_message(type, message, client) {
         console.log('======== send_message() =========');
         this.socket.send(JSON.stringify({
-            type: 'give_data',
-            message: message
+            type: type,
+            payload: message
         }));
     }
 
@@ -122,6 +122,7 @@ class Repo_WS {
         repoHelperV2.c_log('get_storage()', true);
 
         const res = await new Promise((resolve, reject) => {
+            // exec('DIR', (error, stdout, stderr) => {
             exec('df -kh', (error, stdout, stderr) => {
                 if (error) return reject(error);
                 if (stderr) return reject(stderr);
@@ -131,7 +132,7 @@ class Repo_WS {
 
         console.log(res);
 
-        this.send_message(res);
+        this.send_message('give_storage', res, 'HOST_21');
     }
 
 }
