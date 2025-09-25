@@ -3,13 +3,12 @@ const path = require('path');
 const WebSocket = require('ws');
 const repoCommand = require('./repo.command.');
 const repoHelperV2 = require('./repo.helperV2');
+const { exec } = require('child_process');
 
 class Repo_WS {
 
-
     socket = null;
     client_settings = null;
-
 
     async initialize() {
         try {
@@ -70,7 +69,7 @@ class Repo_WS {
 
 
     handle_message(data) {
-        repoCommand.exec_command(data);
+        this.exec_command(data);
     }
 
 
@@ -93,6 +92,43 @@ class Repo_WS {
     getter_client_settings() {
         return this.client_settings;
     }
+
+
+
+    send_message(message, client) {
+        console.log('======== send_message() =========');
+        this.socket.send(JSON.stringify({
+            type: 'message',
+            message: message
+        }));
+    }
+
+
+
+    exec_command(data) {
+        repoHelperV2.c_log('GOT COMMAND', true);
+
+        if (data == 'get_storage') {
+            this.get_storage();
+        }
+    }
+
+
+
+    async get_storage() {
+        const res = await new Promise((resolve, reject) => {
+            exec('df -kh', (error, stdout, stderr) => {
+                if (error) return reject(error);
+                if (stderr) return reject(stderr);
+                resolve(stdout);
+            });
+        });
+
+        console.log(res);
+
+        this.send_message(res);
+    }
+
 }
 
 module.exports = new Repo_WS();
