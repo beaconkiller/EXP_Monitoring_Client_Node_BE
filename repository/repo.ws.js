@@ -1,9 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 const WebSocket = require('ws');
-const repoCommand = require('./repo.command.');
 const repoHelperV2 = require('./repo.helperV2');
 const { exec } = require('child_process');
+const repoCommand = require('./repo.command');
+const repoGlobal = require('./repo.global');
 
 class Repo_WS {
 
@@ -29,6 +30,9 @@ class Repo_WS {
                     type: 'register',
                     deviceId: this.client_settings['client_id'],
                 }));
+
+                repoGlobal.setter_target_socket(this.socket);
+                repoCommand.init_loop();
             });
 
             this.socket.on('message', (data) => {
@@ -46,6 +50,8 @@ class Repo_WS {
 
         } catch (error) {
             this.socket = null;
+            repoGlobal.setter_target_socket(null);
+
             this.reconnect_ws();
         }
     }
@@ -54,6 +60,7 @@ class Repo_WS {
     connect_ws() {
         // console.log('========= connect_ws() =========');
         this.socket = new WebSocket(this.client_settings['target_ws_host']);
+        repoGlobal.setter_target_socket(this.socket);
     }
 
 
