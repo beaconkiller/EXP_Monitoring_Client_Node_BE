@@ -36,6 +36,7 @@ class Repo_WS {
             });
 
             this.socket.on('close', () => {
+                this.socket = null;
                 this.reconnect_ws();
             });
 
@@ -44,7 +45,8 @@ class Repo_WS {
             });
 
         } catch (error) {
-            console.error(error);
+            this.socket = null;
+            this.reconnect_ws();
         }
     }
 
@@ -56,14 +58,16 @@ class Repo_WS {
 
 
     async reconnect_ws() {
-        console.log('reconnecting...');
-        await new Promise((resolve) => {
-            setTimeout(() => {
-                resolve();
-            }, 2000);
-        });
+        while (this.socket == null) {
+            console.log('reconnecting...');
+            await new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve();
+                }, 2000);
+            });
 
-        this.initialize();
+            this.initialize();
+        }
     }
 
 
