@@ -13,6 +13,12 @@ class Repo_Command {
     async init_loop() {
         repoHelperV2.c_log('init_loop()');
 
+        let target_socket = repoGlobal.getter_target_socket();
+
+        if (target_socket == null) {
+            return;
+        }
+
         while (true) {
             await new Promise((resolve) => {
                 setTimeout(() => {
@@ -20,7 +26,6 @@ class Repo_Command {
                 }, 1000);
             })
 
-            let target_socket = repoGlobal.getter_target_socket();
 
 
             if (target_socket) {

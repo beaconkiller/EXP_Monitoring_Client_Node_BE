@@ -23,7 +23,12 @@ class Repo_WS {
 
             this.connect_ws();
 
+
             this.socket.on('open', () => {
+                if (repoGlobal.host_socket == null) {
+                    return;
+                }
+
                 console.log('Connected to server');
 
                 this.socket.send(JSON.stringify({
@@ -32,6 +37,7 @@ class Repo_WS {
                 }));
 
                 repoGlobal.setter_target_socket(this.socket);
+
                 repoCommand.init_loop();
             });
 
@@ -41,6 +47,8 @@ class Repo_WS {
 
             this.socket.on('close', () => {
                 this.socket = null;
+                repoGlobal.setter_target_socket(null);
+
                 this.reconnect_ws();
             });
 
