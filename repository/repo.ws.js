@@ -115,7 +115,7 @@ class Repo_WS {
 
 
     send_message(type, message, client) {
-        console.log('======== send_message() =========');
+        // console.log('======== send_message() =========');
         this.socket.send(JSON.stringify({
             type: type,
             payload: message
@@ -125,20 +125,24 @@ class Repo_WS {
 
 
     exec_command(data) {
-        repoHelperV2.c_log('GOT COMMAND', true);
+        // repoHelperV2.c_log('GOT COMMAND', true);
 
         data = JSON.parse(data);
-        let type = data['type']
+        let type = data['type'];
+
+        // console.log(data);
 
         if (type == 'get_storage') {
             this.get_storage();
+        }else if (type == 'get_installed_db') {
+            repoCommand.get_installed_db();
         }
     }
 
 
 
     async get_storage() {
-        repoHelperV2.c_log('get_storage()', true);
+        // repoHelperV2.c_log('get_storage()', true);
 
         const res = await new Promise((resolve, reject) => {
             // exec('DIR', (error, stdout, stderr) => {
@@ -149,7 +153,7 @@ class Repo_WS {
             });
         });
 
-        console.log(res);
+        // console.log(res);
 
         this.send_message('give_storage', res, 'HOST_21');
     }

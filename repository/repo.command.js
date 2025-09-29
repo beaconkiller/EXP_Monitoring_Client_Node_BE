@@ -111,6 +111,22 @@ class Repo_Command {
     }
 
 
-}
+
+    async get_installed_db() {
+        repoHelperV2.c_log('get_installed_db()', true);
+
+        let x = await new Promise((resolve, reject) => {
+            exec("systemctl list-units --type=service | grep -E 'mysql|mariadb|postgresql|mongodb|redis'", (err, stdout) => {
+                if (err) return reject(err);
+
+                resolve(stdout);
+
+            });
+        });
+
+        console.log(x);
+    };
+};
+
 
 module.exports = new Repo_Command();
