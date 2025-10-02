@@ -124,9 +124,72 @@ class Repo_Command {
 
             });
         });
-
-        console.log(x);
     };
+
+
+
+    async get_pm2_list() {
+        try {
+            // repoHelperV2.c_log('get_pm2_list', true);
+
+            let res = await new Promise((resolve, reject) => {
+                exec("pm2 jlist", (err, stdout) => {
+                    if (err) return null;
+
+                    return resolve(stdout);
+                });
+            });
+
+            // console.log(res);
+
+            this.send_message('give_pm2_list', res);
+        } catch (error) {
+
+        }
+    };
+
+
+
+    async get_pm2_sudo_list() {
+        try {
+            repoHelperV2.c_log('get_pm2_list', true);
+
+            let res = await new Promise((resolve, reject) => {
+                exec("sudo pm2 jlist", (err, stdout) => {
+                    if (err) reject(null);
+
+                    resolve(stdout);
+                });
+            });
+
+            // console.log(res);
+
+            this.send_message('give_pm2_sudo_list', res);
+        } catch (error) {
+
+        }
+    };
+
+
+
+    async get_installed_db() {
+        try {
+            // repoHelperV2.c_log('get_installed_db()', true);
+            let x = await new Promise((resolve, reject) => {
+                exec("systemctl list-units --type=service | grep -E 'mysql|mariadb|postgresql|mongodb|redis'", (err, stdout) => {
+                    if (err) return reject(err);
+                    resolve(stdout);
+                });
+            });
+        } catch (error) {
+
+        }
+
+        // console.log(x);
+    };
+
+
+
 };
 
 

@@ -132,11 +132,15 @@ class Repo_WS {
         let type = data['type'];
 
         // console.log(data);
-
+        
         if (type == 'get_storage') {
             this.get_storage();
         }else if (type == 'get_installed_db') {
             repoCommand.get_installed_db();
+        }else if(type == 'get_pm2_list'){
+            repoCommand.get_pm2_list();
+        }else if(type == 'get_pm2_sudo_list'){
+            repoCommand.get_pm2_sudo_list();
         }
     }
 
