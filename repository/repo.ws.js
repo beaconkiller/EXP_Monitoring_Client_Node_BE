@@ -34,6 +34,7 @@ class Repo_WS {
                 this.socket.send(JSON.stringify({
                     type: 'register',
                     deviceId: this.client_settings['client_id'],
+                    device_type: 'client',
                 }));
 
                 repoGlobal.setter_target_socket(this.socket);

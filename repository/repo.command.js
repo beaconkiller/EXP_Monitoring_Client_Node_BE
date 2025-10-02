@@ -9,7 +9,7 @@ const repoGlobal = require('./repo.global');
 
 class Repo_Command {
 
-    interval_loop = 5000
+    interval_loop = 3000;
 
     async init_loop() {
         repoHelperV2.c_log('init_loop()');
