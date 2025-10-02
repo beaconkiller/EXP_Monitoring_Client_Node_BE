@@ -9,7 +9,7 @@ module.exports = {
     watch: true,
     ignore_watch: ["node_modules", "file_storage"],
     env: {
-      PORT: 4080,
+      PORT: 4097,
       LOGS_FORMAT: "dev",
       JWT_SECRET: "secret",
       THE_KEY_V1: 'klapaucius',
